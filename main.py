@@ -63,7 +63,6 @@ def generate_text(prompt, iam_token, folder_id, model_name="yandexgpt-lite", tem
     if response.status_code == 200:
         try:
             result = response.json()
-            print(result["result"]["alternatives"][0]["message"]["text"])
             return result["result"]["alternatives"][0]["message"]["text"]
         except KeyError:
             raise ValueError("Unexpected response format")
