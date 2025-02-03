@@ -233,6 +233,7 @@ async def start_command(message: Message):
 
 @router.message(Command("set_profile"))
 async def set_profile(message: Message, state: FSMContext):
+    logger.info(f'ID{message.from_user.id} -- Received: /set_profile')
     await message.answer("Введите ваш вес (в кг):")
     await state.set_state(UserProfile.weight)
 
