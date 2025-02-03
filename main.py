@@ -1,4 +1,6 @@
 import os
+import logging
+import sys
 import datetime
 import re
 import requests
@@ -125,7 +127,14 @@ router = Router()
 dispatcher.include_router(router)
 
 users = {}
-logs = dict[int: Logger]()
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 
 async def reset_logs():
@@ -140,7 +149,7 @@ async def reset_logs():
             users[user_id]["logged_calories"] = 0
             users[user_id]["burned_calories"] = 0
             users[user_id]["additional_water_goal"] = 0
-            logs[user_id].log('Reset stats', EventType.INFO)
+            logger.info(f'ID{user_id} -- Reset stats')
 
 
 def plot_progress(user_id):
@@ -199,15 +208,13 @@ def plot_progress(user_id):
 @router.message(Command("start"))
 async def start_command(message: Message):
     user_id = message.from_user.id
-    if user_id not in logs:
-        logs[user_id] = Logger(f'{user_id}_commands.log')
-        logs[user_id].log('Bot started!', EventType.INFO)
     if user_id not in users:
+        logger.info(f'ID{user_id} -- Bot started!')
         await message.answer("Привет! Я помогу рассчитать дневные нормы воды и калорий!\n"
                              "Напиши /set_profile, чтобы начать.")
         return
 
-    logs[user_id].log(f'Received: {message.text}', EventType.INFO)
+    logger.info(f'ID{user_id} -- Received: {message.text}')
     user = users[user_id]
     await message.answer("Привет! Я помогу рассчитать дневные нормы воды и калорий!\n\n"
                          f"📊 **Ваш профиль**\n"
@@ -344,7 +351,7 @@ async def process_calorie_goal(message: Message, state: FSMContext):
 @router.message(Command("log_water"))
 async def log_water(message: Message):
     user_id = message.from_user.id
-    logs[user_id].log(f'Received: {message.text}', EventType.INFO)
+    logger.info(f'ID{user_id} -- Received: {message.text}')
     if user_id not in users:
         await message.answer("Сначала настройте профиль с помощью команды /set_profile.")
         return
@@ -389,7 +396,7 @@ async def log_water(message: Message):
 @router.message(Command("log_food"))
 async def log_food(message: Message, state: FSMContext):
     user_id = message.from_user.id
-    logs[user_id].log(f'Received: {message.text}', EventType.INFO)
+    logger.info(f'ID{user_id} -- Received: {message.text}')
     if user_id not in users:
         await message.answer("Сначала настройте профиль с помощью команды /set_profile.")
         return
@@ -441,7 +448,7 @@ async def process_food_weight(message: Message, state: FSMContext):
 @router.message(Command("log_workout"))
 async def log_workout(message: Message):
     user_id = message.from_user.id
-    logs[user_id].log(f'Received: {message.text}', EventType.INFO)
+    logger.info(f'ID{user_id} -- Received: {message.text}')
     if user_id not in users:
         await message.answer("Сначала настройте профиль с помощью команды /set_profile.")
         return
@@ -478,7 +485,7 @@ async def log_workout(message: Message):
 @router.message(Command("check_progress"))
 async def check_progress(message: Message):
     user_id = message.from_user.id
-    logs[user_id].log(f'Received: {message.text}', EventType.INFO)
+    logger.info(f'ID{user_id} -- Received: {message.text}')
     if user_id not in users:
         await message.answer("Сначала настройте профиль с помощью команды /set_profile.")
         return
@@ -529,7 +536,7 @@ async def check_progress(message: Message):
 @router.message(Command("progress_graphs"))
 async def send_progress_graphs(message: Message):
     user_id = message.from_user.id
-    logs[user_id].log(f'Received: {message.text}', EventType.INFO)
+    logger.info(f'ID{user_id} -- Received: {message.text}')
     if user_id not in users:
         await message.answer("Сначала настройте профиль с помощью команды /set_profile.")
         return
