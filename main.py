@@ -126,6 +126,7 @@ router = Router()
 dispatcher.include_router(router)
 
 users = {}
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
@@ -134,6 +135,7 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ]
 )
+logging.getLogger("aiogram").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
