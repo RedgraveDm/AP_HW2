@@ -12,7 +12,6 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import Command, StateFilter
 import matplotlib.pyplot as plt
-from logger import Logger, EventType
 
 
 YANDEX_CLOUD_CAT_ID = os.getenv("YANDEX_CLOUD_CAT_ID")
@@ -130,6 +129,7 @@ users = {}
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
+    datefmt="%b %d %I:%M:%S %p",
     handlers=[
         logging.StreamHandler(sys.stdout)
     ]
