@@ -12,12 +12,16 @@ from aiogram.filters import Command, StateFilter
 import matplotlib.pyplot as plt
 from logger import Logger, EventType
 
-YANDEX_CLOUD_CAT_ID = 'b1g2m54ecdk7a30sh1os'
-YANDEX_KEY_ID = 'aje5phn39jaq8q812ab7'
-YANDEX_API_KEY = 'AQVNxcxuNM1aRpARKWdoiVBj9hpm0jg266ocr4_w'
 
-OPEN_WEATHER_API_KEY = 'ae6503c1973fe17fb25f12f8d4105b92'
-BOT_TOKEN = "7281948170:AAHE1V_pMo539vLVr5vfQ8mjd7qwQ4BA0vI"
+YANDEX_CLOUD_CAT_ID = os.getenv("YANDEX_CLOUD_CAT_ID")
+YANDEX_KEY_ID = os.getenv("YANDEX_KEY_ID")
+YANDEX_API_KEY = os.getenv("YANDEX_API_KEY")
+
+OPEN_WEATHER_API_KEY = os.getenv("OPEN_WEATHER_API_KEY")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+if not all([YANDEX_CLOUD_CAT_ID, YANDEX_KEY_ID, YANDEX_API_KEY, OPEN_WEATHER_API_KEY, BOT_TOKEN]):
+    raise ValueError("Check environment variables")
 
 
 class UserProfile(StatesGroup):
